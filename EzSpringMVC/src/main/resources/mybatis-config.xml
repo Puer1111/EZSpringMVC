@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<!-- NULL일 때 NULL로 인식하게 함 -->
+<settings>
+	<setting name="jdbcTypeForNull" value="NULL"/>
+</settings>
+<!-- VO만들어질때마다 추가 -->
+<typeAliases>
+<typeAlias type="com.EZ.spring.member.domain.MemberVO" alias="Member"/>
+<typeAlias type="com.EZ.spring.notice.domain.NoticeVO" alias="Notice"/>
+<typeAlias type="com.EZ.spring.board.domain.BoardVO" alias="Board"/>
+
+ <!-- Alias == 별칭 붙히기  -->
+</typeAliases>
+<mappers>
+<mapper resource="mappers/member-mapper.xml"/>
+<mapper resource="mappers/notice-mapper.xml"/>
+<mapper resource="mappers/board-mapper.xml"/>
+</mappers>	
+</configuration>

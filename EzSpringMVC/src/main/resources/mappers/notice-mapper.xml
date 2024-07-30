@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="NoticeMapper">
+	<resultMap type="Notice" id="NoticeResultMap">
+		<id property="noticeNo" column="NOTICE_NO" />
+		<result property="noticeSubject" column="NOTICE_SUBJECT" />
+		<result property="noticeContent" column="NOTICE_CONTENT" />
+		<result property="noticeWriter" column="NOTICE_WRITER" />
+		<result property="noticeDate" column="NOTICE_DATE" />
+		<result property="updateDate" column="UPDATE_DATE" />
+		<result property="viewCount" column="VIEW_COUNT" />
+	</resultMap>
+	<insert id="insertNotice">
+		INSERT INTO NOTICE_TBL
+		VALUES(SEQ_NOTICE_NO.NEXTVAL,#{noticeSubject},#{noticeContent},#{noticeWriter},DEFAULT,DEFAULT,DEFAULT)
+	</insert>
+	<select id="selectList" resultMap="NoticeResultMap">
+		SELECT * FROM NOTICE_TBL ORDER
+		BY NOTICE_NO DESC
+	</select>
+	<select id="getTotalCount" resultType="_int">
+		SELECT COUNT(*) FROM
+		NOTICE_TBL
+	</select>
+	<select id="selectOneByNo" resultMap="NoticeResultMap">
+		SELECT * FROM NOTICE_TBL
+		WHERE NOTICE_NO=#{noticeNo}
+	</select>
+	<delete id="deleteNotice">
+		DELETE FROM NOTICE_TBL WHERE NOTICE_NO=#{noticeNo}
+	</delete>
+	<update id="updateNotice">
+		UPDATE NOTICE_TBL SET NOTICE_SUBJECT=#{noticeSubject}
+		,
+		NOTICE_CONTENT=#{noticeContent},UPDATE_DATE=DEFAULT WHERE
+		NOTICE_NO=#{noticeNo}
+	</update>
+	<!-- parameterType="map" OR parameterType="hashMap" 생략 -->
+	<select id="selectSearchList" resultMap="NoticeResultMap">
+		<!-- 조건이 충족되지 않을 시 if절 위에만 실행 -->
+		select * from notice_tbl
+		<where>
+		<if test="searchCondition == 'all'">
+		<!-- 조건에 맞는 것들 다 넣는거  -->
+		NOTICE_SUBJECT LIKE '%'||
+		#{searchKeyword}||'%' 
+		OR NOTICE_CONTENT LIKE '%'|| #{searchKeyword}||'%' 
+		OR NOTICE_WRITER LIKE '%'|| #{searchKeyword}||'%'
+		</if>
+		<!-- 작성자 -->
+		<if test="searchCondition == 'writer'">
+ 		notice_writer LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<!-- 제목 -->
+		<if test="searchCondition == 'subject'">
+		notice_subject  LIKE '%'|| #{searchKeyword}||'%'
+		</if>
+		<!-- 내용 -->
+		<if test="searchCondition == 'content'">
+		notice_content  LIKE '%'|| #{searchKeyword}||'%'
+		</if>
+		</where>
+		order by notice_no DESC
+	</select>
+</mapper>
