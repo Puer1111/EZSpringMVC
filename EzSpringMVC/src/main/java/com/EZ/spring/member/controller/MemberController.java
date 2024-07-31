@@ -152,56 +152,57 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/member/update.kh", method = RequestMethod.POST)
-	public String updateMember(Model model,
-			@RequestParam("memberId") String memberId,
-			@RequestParam(value="memberPw") String memberPw, 
-			@RequestParam(value="memberAge", required=false,defaultValue="0") int memberAge,
-			@RequestParam(value="memberGender", required=false) String memberGender,
-			@RequestParam(value="memberEmail", required=false) String memberEmail,
-			@RequestParam(value="memberPhone", required=false) String memberPhone, 
-			@RequestParam(value="memberAddress", required=false) String memberAddress) {
-	try {
-		MemberVO modifyOne= new MemberVO(memberId,memberPw,memberAge,memberGender,memberEmail,memberPhone,memberAddress);
-		int result = mService.updatemember(modifyOne);
-		if(result>0) {
+	public String updateMember(Model model, @RequestParam("memberId") String memberId,
+			@RequestParam(value = "memberPw") String memberPw,
+			@RequestParam(value = "memberAge", required = false, defaultValue = "0") int memberAge,
+			@RequestParam(value = "memberGender", required = false) String memberGender,
+			@RequestParam(value = "memberEmail", required = false) String memberEmail,
+			@RequestParam(value = "memberPhone", required = false) String memberPhone,
+			@RequestParam(value = "memberAddress", required = false) String memberAddress) {
+		try {
+			MemberVO modifyOne = new MemberVO(memberId, memberPw, memberAge, memberGender, memberEmail, memberPhone,
+					memberAddress);
+			int result = mService.updatemember(modifyOne);
+			if (result > 0) {
 //		response.sendRedirect("/member/mypage.kh?memberId="+memberId);
-			return "redirect:/member/mypage.kh";
+				return "redirect:/member/mypage.kh";
 //		redirect-> Servlet 들렸다가 jsp로
-		}else {
-			model.addAttribute("msg", "정보가 존재하지 않습니다.");
+			} else {
+				model.addAttribute("msg", "정보가 존재하지 않습니다.");
+				return "common/errorPage";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("msg", e.getMessage());
 			return "common/errorPage";
 		}
-	}catch(Exception e) {
-		e.printStackTrace();
-		model.addAttribute("msg", e.getMessage());
-		return "common/errorPage";
 	}
-	}
-	@RequestMapping(value="/member/delete.kh" , method = RequestMethod.GET)
-	public String deleteMember(Model model,HttpSession session) {
+
+	@RequestMapping(value = "/member/delete.kh", method = RequestMethod.GET)
+	public String deleteMember(Model model, HttpSession session) {
 		try {
-			String memberId=(String)session.getAttribute("memberId");
-			MemberVO member=mService.selectOneById(memberId);
-			if(member!=null) {
-			int result=mService.deleteMember(memberId);
-			if(result>0) {
+			String memberId = (String) session.getAttribute("memberId");
+			MemberVO member = mService.selectOneById(memberId);
+			if (member != null) {
+				int result = mService.deleteMember(memberId);
+				if (result > 0) {
 //				session.invalidate();
 //				return "redirect:/";
-				return"redirect:/member/logout.kh";
-			}else {
-			model.addAttribute("msg","회원탈퇴가 되지 않았습니다");
-			return "common/errorPage";
-			}
-			}else {
-				model.addAttribute("msg","회원탈퇴가 되지 않았습니다");
+					return "redirect:/member/logout.kh";
+				} else {
+					model.addAttribute("msg", "회원탈퇴가 되지 않았습니다");
+					return "common/errorPage";
+				}
+			} else {
+				model.addAttribute("msg", "회원탈퇴가 되지 않았습니다");
 				return "common/errorPage";
 			}
 
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			model.addAttribute("msg",e.getMessage());
+			model.addAttribute("msg", e.getMessage());
 			return "common/errorPage";
 		}
-	
+
 	}
 }

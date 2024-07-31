@@ -18,15 +18,63 @@
   <result property="bStatus" column="B_STATUS"/>
   </resultMap>
   <insert id="RegistBoard">
-  INSERT INTO BOARD_TBL VALUES(SEQ_BOARD_NO.NEXTVAL,#{boardTitle},#{boardContent},#{boardWriter},#{boardFilename},#{boardFileRename},#{boardFilepath},#{boardFilelength},DEFAULT,DEFAULT,DEFAULT,DEFAULT)
+  	INSERT INTO BOARD_TBL VALUES(SEQ_BOARD_NO.NEXTVAL,#{boardTitle},#{boardContent},#{boardWriter},#{boardFilename},#{boardFileRename},#{boardFilepath},#{boardFilelength},DEFAULT,DEFAULT,DEFAULT,DEFAULT)
   </insert>
-  <select id="getTotalCount"  resultType="_int">
-  SELECT COUNT(*) FROM BOARD_TBL
-  </select>
+ <!--  <select id="getTotalCount"  resultType="_int">
+  	SELECT COUNT(*) FROM BOARD_TBL
+  </select> -->
   <select id="selectList" resultMap="BoardResultMap">
-  SELECT * FROM BOARD_TBL ORDER BY BOARD_NO DESC
+  	SELECT * FROM BOARD_TBL ORDER BY BOARD_NO DESC
   </select>
   <select id="selectByNo" resultMap="BoardResultMap">
-  select * from BOARD_TBL WHERE BOARD_NO=#{boardNo}
+ 	 select * from BOARD_TBL WHERE BOARD_NO=#{boardNo}
+  </select>
+  <delete id="deleteBoard">
+ 	 DELETE FROM BOARD_TBL WHERE BOARD_NO=#{boardNo}
+  </delete>
+  <update id="updateBoard">
+ 	 UPDATE BOARD_TBL SET BOARD_TITLE=#{boardTitle},BOARD_CONTENT=#{boardContent},B_UPDATE_DATE=DEFAULT WHERE BOARD_NO=#{boardNo}
+  </update>
+  
+  <select id="selectSearchList" resultMap="BoardResultMap">
+  	SELECT * FROM BOARD_TBL 
+  	<where>
+	  <if test= "searchCondition=='all'">
+	  	BOARD_TITLE LIKE '%'|| #{searchKeyword}||'%' OR
+		BOARD_CONTENT LIKE '%'|| #{searchKeyword}||'%' OR
+		BOARD_WRITER LIKE '%'|| #{searchKeyword}||'%'
+	 </if>
+	  <if test= "searchCondition=='writer'">
+	  BOARD_WRITER LIKE '%' || #{searchKeyword}||'%'
+	  </if>
+	  <if test= "searchCondition=='title'">
+	  BOARD_TITLE LIKE '%' || #{searchKeyword}||'%'
+	  </if>
+	  <if test= "searchCondition=='content'">
+	  BOARD_CONTENT LIKE '%' || #{searchKeyword}||'%'
+	  </if>
+  </where>
+  ORDER BY BOARD_NO DESC
+  </select>
+  
+  <select id="getTotalCount" resultType="_int">
+  select count(*) from board_tbl
+  <where>
+	  <if test="searchCondition=='all'">
+	  	BOARD_TITLE LIKE '%'|| #{searchKeyword}||'%' OR
+		BOARD_CONTENT LIKE '%'|| #{searchKeyword}||'%' OR
+		BOARD_WRITER LIKE '%'|| #{searchKeyword}||'%'
+	 </if>
+	  <if test="searchCondition=='writer'">
+	  BOARD_WRITER LIKE '%' || #{searchKeyword}||'%'
+	  </if>
+	  <if test="searchCondition=='title'">
+	  BOARD_TITLE LIKE '%' || #{searchKeyword}||'%'
+	  </if>
+	  <if test= "searchCondition=='content'">
+	  BOARD_CONTENT LIKE '%' || #{searchKeyword}||'%'
+	  </if>
+  </where>
+  ORDER BY BOARD_NO DESC
   </select>
   </mapper>

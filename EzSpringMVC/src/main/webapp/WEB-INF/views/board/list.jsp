@@ -22,7 +22,7 @@
 <c:forEach items="${bList}" var="board">
 	<tr>
 		<td>${board.boardNo }</td>
-		<td><a href="/board/detail.kh?boardNo=${board.boardNo}">${board.boardTitle }</a></td>
+		<td><a href="/board/detail.kh?boardNo=${board.boardNo}&currentPage=${currentPage}">${board.boardTitle }</a></td>
 		<td>${board.boardWriter }</td>
 		<td>${board.boardContent }</td>
 		<td>${board.bCreateDate }</td>
@@ -42,8 +42,25 @@
 						<a href="/board/list.kh?currentPage=${endNavi+1}">다음</a>
 					</c:if>	
 		</td>
+		<tr>
+			<td colspan="4" align="center">
+				<form action="/board/search.kh" method="post">
+					<select name="searchCondition">
+						<option value="all" <c:if test ="${searchCondition =='all'}">select</c:if>>전체</option>
+						<option value="writer" <c:if test ="${searchCondition =='writer'}">select</c:if>>작성자</option>
+						<option value="title" <c:if test ="${searchCondition =='title'}">select</c:if>>제목</option>
+						<option value="content" <c:if test ="${searchCondition =='content'}">select</c:if>>내용</option>	
+					</select>
+				<input type="text" name="searchKeyword" placeholder="검색어를 입력하슈">
+				<input type="submit" value="검색"> 
+				</form>
+			</td>
+			<td>
+				<a href="/board/register.kh">글쓰기</a>
+			</td>
+		</tr>
+			
 		</table>
-		
 		<script>
 		var message="${message}";
 		if(message){
