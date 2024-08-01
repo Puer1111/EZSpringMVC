@@ -19,10 +19,12 @@
 			<span>${board.boardContent }</span>
 		</li>
 		<li><label>날짜</label> 
+		
 			<span>${board.bCreateDate }</span>
 		</li>
-		<li><label>첨부파일</label> 
-			<span>${board.boardFilename }</span>
+		<li>
+			<label>첨부파일</label> 
+			<a href="/resources/bUploadFiles/${board.boardFileRename}"download>${board.boardFilename }</a>
 		</li>
 	</ul>
 	<br>

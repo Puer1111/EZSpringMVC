@@ -26,7 +26,12 @@
 		<td>${board.boardWriter }</td>
 		<td>${board.boardContent }</td>
 		<td>${board.bCreateDate }</td>
-		<td>${board.boardFilename }</td>
+		<c:if test="${not empty board.boardFilename }">
+		<td>O</td>
+		</c:if>
+		<c:if test="${ empty board.boardFilename }">
+		<td>X</td>
+		</c:if>
 	</tr>
 	</c:forEach>
 	<tr>
